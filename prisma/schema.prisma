@@ -27,7 +27,7 @@ model People {
   userid  String?  @unique
   nik Int @unique
   name     String   @unique
-  address Text
+  address String
   resident_status String?
   number_of_family_members Int
   createdAt DateTime @default(now())
