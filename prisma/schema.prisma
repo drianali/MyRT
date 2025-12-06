@@ -22,5 +22,15 @@ model User {
   createdAt DateTime @default(now())
 }
 
+model Letter {
+  id        Int      @id @default(autoincrement())
+  people_id     Int
+  letter_type  String
+  needs    String
+  status String
+  submission_date DateTime
+  createdAt DateTime @default(now())
+}
+
 
 
