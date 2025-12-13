@@ -15,12 +15,29 @@ datasource db {
 
 model User {
    id        Int      @id @default(autoincrement())
-  username  String?  @unique
+  username  String  @unique
   email     String   @unique
-  phone_number String?  @unique
-  password String?
+  phoneNumber String  @unique
+  password String
   createdAt DateTime @default(now())
 }
 
+model Letter {
+  id        Int      @id @default(autoincrement())
+  peopleId     Int
+  letterType  String
+  needs    String
+  status String
+  createdAt DateTime @default(now())
+}
 
-
+model Complaint {
+  id        Int      @id @default(autoincrement())
+  peopleId     Int
+  titleReport  String
+  category String
+  description    String
+  picture String?
+  status String
+  createdAt DateTime @default(now())
+}
