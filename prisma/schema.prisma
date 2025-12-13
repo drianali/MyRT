@@ -41,5 +41,3 @@ model Complaint {
   status String
   createdAt DateTime @default(now())
 }
-
-
