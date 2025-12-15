@@ -40,4 +40,13 @@ model Complaint {
   picture String?
   status String
   createdAt DateTime @default(now())
+model People {
+   id        Int      @id @default(autoincrement())
+  userid  String?  @unique
+  nik Int @unique
+  name     String   @unique
+  address String
+  resident_status String?
+  number_of_family_members Int
+  createdAt DateTime @default(now())
 }

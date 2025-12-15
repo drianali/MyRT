@@ -8,6 +8,10 @@ import { ComplaintModule } from './complaint/complaint.module';
 
 @Module({
   imports: [UsersModule, PrismaModule, LetterModule, ComplaintModule],
+import { PeoplesModule } from './peoples/peoples.module';
+
+@Module({
+  imports: [UsersModule, PrismaModule, PeoplesModule],
   controllers: [AppController],
   providers: [AppService],
 })
