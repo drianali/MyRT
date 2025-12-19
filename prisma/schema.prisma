@@ -43,7 +43,7 @@ model Complaint {
 }
 
 model People {
-   id        Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userid  Int  @unique
   nik String @unique
   name     String   @unique
@@ -55,6 +55,6 @@ model People {
 
 model Role {
    id        Int      @id @default(autoincrement())
-  role_name  String?  @unique
+  roleName  String  @unique
   createdAt DateTime @default(now())
 }
