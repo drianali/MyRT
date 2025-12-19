@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateLetterDto } from './dto/create-letter.dto';
 import { UpdateLetterDto } from './dto/update-letter.dto';
 
 @Injectable()
 export class LetterService {
-  create(createLetterDto: CreateLetterDto) {
-    return 'This action adds a new letter';
-  }
-
-  findAll() {
-    return `This action returns all letter`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} letter`;
-  }
-
-  update(id: number, updateLetterDto: UpdateLetterDto) {
-    return `This action updates a #${id} letter`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} letter`;
-  }
-}
+  constructor(private prisma: PrismaService) {}
+    
+    create(data: CreateLetterDto) {
+        return this.prisma.letter.create({ data });
+      }
+    
+      findAll() {
+        return this.prisma.letter.findMany();
+      }
+    
+      findOne(id: number) {
+        return this.prisma.letter.findUnique({ where: { id } });
+      }
+    
+      update(id: number, data: UpdateLetterDto) {
+        return this.prisma.letter.update({ where: { id }, data });
+      }
+    
+      remove(id: number) {
+        return this.prisma.letter.delete({ where: { id } });
+      }
+    }
