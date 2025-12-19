@@ -9,9 +9,10 @@ import { ComplaintModule } from './complaint/complaint.module';
 @Module({
   imports: [UsersModule, PrismaModule, LetterModule, ComplaintModule],
 import { PeoplesModule } from './peoples/peoples.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
-  imports: [UsersModule, PrismaModule, PeoplesModule],
+  imports: [UsersModule, PrismaModule, PeoplesModule, RolesModule],
   controllers: [AppController],
   providers: [AppService],
 })
