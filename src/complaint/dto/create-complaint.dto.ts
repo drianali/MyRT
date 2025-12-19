@@ -1,5 +1,5 @@
 export class CreateComplaintDto {
-    peopleId  :    number;
+  peopleId  :    number;
   titleReport  :  string;
   category : string;
   description    : string;

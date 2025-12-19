@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-   id        Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   username  String  @unique
   email     String   @unique
   phoneNumber String  @unique
@@ -44,17 +44,25 @@ model Complaint {
 
 model People {
   id        Int      @id @default(autoincrement())
-  userid  Int  @unique
+  userId  Int  @unique
   nik String @unique
   name     String   @unique
   address String
-  resident_status String?
-  number_of_family_members String?
+  residentStatus String?
+  numberFamilyMembers String?
   createdAt DateTime @default(now())
 }
 
 model Role {
-   id        Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   roleName  String  @unique
+  createdAt DateTime @default(now())
+}
+
+model Announcement {
+  id        Int      @id @default(autoincrement())
+  title  String  @unique
+  content String
+  adminId Int @unique
   createdAt DateTime @default(now())
 }

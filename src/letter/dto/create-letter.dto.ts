@@ -1,5 +1,5 @@
 export class CreateLetterDto {
-    peopleId  :   number;
+  peopleId  :   number;
   letterType :  string;
   needs   : string;
   status : string;
