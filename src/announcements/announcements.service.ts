@@ -19,7 +19,7 @@ export class AnnouncementsService {
             return this.prisma.announcement.findUnique({ where: { id } });
           }
         
-          update(id: number, data: CreateAnnouncementDto) {
+          update(id: number, data: UpdateAnnouncementDto) {
             return this.prisma.announcement.update({ where: { id }, data });
           }
         

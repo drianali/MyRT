@@ -3,7 +3,6 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,55 +13,75 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String  @unique
-  email     String   @unique
-  phoneNumber String  @unique
-  password String
-  createdAt DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  username      String   @unique
+  email         String   @unique
+  phoneNumber   String   @unique
+  password      String
+  createdAt     DateTime @default(now())
+  
+  people        People?
+  
+  roleId        Int?
+  role          Role?    @relation(fields: [roleId], references: [id])
+  
+  announcements Announcement[]
 }
 
 model Letter {
-  id        Int      @id @default(autoincrement())
-  peopleId     Int
+  id          Int      @id @default(autoincrement())
   letterType  String
-  needs    String
-  status String
-  createdAt DateTime @default(now())
+  needs       String
+  status      String
+  createdAt   DateTime @default(now())
+  
+  peopleId    Int
+  people      People   @relation(fields: [peopleId], references: [id])
 }
 
 model Complaint {
-  id        Int      @id @default(autoincrement())
-  peopleId     Int
-  titleReport  String
-  category String
-  description    String
-  picture String?
-  status String
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  titleReport String
+  category    String
+  description String
+  picture     String?
+  status      String
+  createdAt   DateTime @default(now())
+  
+  peopleId    Int
+  people      People   @relation(fields: [peopleId], references: [id])
 }
 
 model People {
-  id        Int      @id @default(autoincrement())
-  userId  Int  @unique
-  nik String @unique
-  name     String   @unique
-  address String
-  residentStatus String?
+  id                  Int      @id @default(autoincrement())
+  nik                 String   @unique
+  name                String   @unique
+  address             String
+  residentStatus      String?
   numberFamilyMembers String?
-  createdAt DateTime @default(now())
+  createdAt           DateTime @default(now())
+  
+  userId              Int      @unique
+  user                User     @relation(fields: [userId], references: [id])
+  
+  letters             Letter[]
+  complaints          Complaint[]
 }
 
 model Role {
   id        Int      @id @default(autoincrement())
-  roleName  String  @unique
+  roleName  String   @unique
   createdAt DateTime @default(now())
+  
+  users     User[]
 }
 
 model Announcement {
   id        Int      @id @default(autoincrement())
-  title  String  @unique
-  content String
-  adminId Int @unique
+  title     String   @unique
+  content   String
   createdAt DateTime @default(now())
+  
+  adminId   Int
+  admin     User     @relation(fields: [adminId], references: [id])
 }
