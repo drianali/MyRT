@@ -5,25 +5,38 @@ import { UpdatePeopleDto } from './dto/update-people.dto';
 
 @Injectable()
 export class PeoplesService {
-    constructor(private prisma: PrismaService) {}
-  
+  constructor(private prisma: PrismaService) {}
+
   create(data: CreatePeopleDto) {
-      return this.prisma.people.create({ data });
-    }
-  
-    findAll() {
-      return this.prisma.people.findMany();
-    }
-  
-    findOne(id: number) {
-      return this.prisma.people.findUnique({ where: { id } });
-    }
-  
-    update(id: number, data: UpdatePeopleDto) {
-      return this.prisma.people.update({ where: { id }, data });
-    }
-  
-    remove(id: number) {
-      return this.prisma.people.delete({ where: { id } });
-    }
+    return this.prisma.people.create({ data });
   }
+
+  findAll() {
+    return this.prisma.people.findMany({
+      include: {
+        user: true,
+        letters: true,
+        complaints: true,
+      },
+    });
+  }
+
+  findOne(id: number) {
+    return this.prisma.people.findUnique({
+      where: { id },
+      include: {
+        user: true,
+        letters: true,
+        complaints: true,
+      },
+    });
+  }
+
+  update(id: number, data: UpdatePeopleDto) {
+    return this.prisma.people.update({ where: { id }, data });
+  }
+
+  remove(id: number) {
+    return this.prisma.people.delete({ where: { id } });
+  }
+}

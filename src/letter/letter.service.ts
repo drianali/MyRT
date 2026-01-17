@@ -6,24 +6,33 @@ import { UpdateLetterDto } from './dto/update-letter.dto';
 @Injectable()
 export class LetterService {
   constructor(private prisma: PrismaService) {}
-    
-    create(data: CreateLetterDto) {
-        return this.prisma.letter.create({ data });
-      }
-    
-      findAll() {
-        return this.prisma.letter.findMany();
-      }
-    
-      findOne(id: number) {
-        return this.prisma.letter.findUnique({ where: { id } });
-      }
-    
-      update(id: number, data: UpdateLetterDto) {
-        return this.prisma.letter.update({ where: { id }, data });
-      }
-    
-      remove(id: number) {
-        return this.prisma.letter.delete({ where: { id } });
-      }
-    }
+
+  create(data: CreateLetterDto) {
+    return this.prisma.letter.create({ data });
+  }
+
+  findAll() {
+    return this.prisma.letter.findMany({
+      include: {
+        people: true,
+      },
+    });
+  }
+
+  findOne(id: number) {
+    return this.prisma.letter.findUnique({
+      where: { id },
+      include: {
+        people: true,
+      },
+    });
+  }
+
+  update(id: number, data: UpdateLetterDto) {
+    return this.prisma.letter.update({ where: { id }, data });
+  }
+
+  remove(id: number) {
+    return this.prisma.letter.delete({ where: { id } });
+  }
+}

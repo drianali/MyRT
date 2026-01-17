@@ -9,6 +9,7 @@ import { ComplaintModule } from './complaint/complaint.module';
 import { PeoplesModule } from './peoples/peoples.module';
 import { RolesModule } from './roles/roles.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AnnouncementsModule } from './announcements/announcements.module';
     LetterModule,
     ComplaintModule,
     AnnouncementsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

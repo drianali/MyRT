@@ -8,15 +8,29 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   create(data: CreateUserDto) {
-    return this.prisma.user.create({ data });
+    return this.prisma.user.create({
+    data: data,
+  });
   }
 
   findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      include: {
+        role: true,
+        people: true,
+      },
+    });
   }
 
   findOne(id: number) {
-    return this.prisma.user.findUnique({ where: { id } });
+    return this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        role: true,
+        people: true,
+        announcements: true,
+      },
+    });
   }
 
   update(id: number, data: UpdateUserDto) {
@@ -25,5 +39,14 @@ export class UsersService {
 
   remove(id: number) {
     return this.prisma.user.delete({ where: { id } });
+  }
+
+  async findOneByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        role: true
+      }
+    });
   }
 }
