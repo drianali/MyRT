@@ -81,7 +81,9 @@ model Announcement {
   title     String   @unique
   content   String
   createdAt DateTime @default(now())
+
+  author    String   @default("Admin RT")
   
   adminId   Int
-  admin     User     @relation(fields: [adminId], references: [id])
+  admin     User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }

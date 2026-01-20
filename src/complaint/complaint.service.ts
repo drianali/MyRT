@@ -1,29 +1,54 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateComplaintDto } from './dto/create-complaint.dto';
-import { UpdateComplaintDto } from './dto/update-complaint.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class ComplaintService {
+export class ComplaintsService {
   constructor(private prisma: PrismaService) {}
-      
-      create(data: CreateComplaintDto) {
-          return this.prisma.complaint.create({ data });
-        }
-      
-        findAll() {
-          return this.prisma.complaint.findMany();
-        }
-      
-        findOne(id: number) {
-          return this.prisma.complaint.findUnique({ where: { id } });
-        }
-      
-        update(id: number, data: UpdateComplaintDto) {
-          return this.prisma.complaint.update({ where: { id }, data });
-        }
-      
-        remove(id: number) {
-          return this.prisma.complaint.delete({ where: { id } });
-        }
+
+  async create(userId: number, data: any) {
+    const warga = await this.prisma.people.findFirst({
+      where: { userId: userId },
+    });
+
+    if (!warga) {
+      throw new NotFoundException("Data warga tidak ditemukan untuk akun ini. Hubungi Admin.");
+    }
+
+    return this.prisma.complaint.create({
+      data: {
+        titleReport: data.title,      
+        description: data.description,
+        category: "Umum",             
+        status: "PENDING",
+        peopleId: warga.id           
+      },
+    });
+  }
+
+  findAll() {
+    return this.prisma.complaint.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { people: true } 
+    });
+  }
+
+  async findMine(userId: number) {
+    const warga = await this.prisma.people.findFirst({
+        where: { userId: userId },
+    });
+    
+    if(!warga) return []; 
+
+    return this.prisma.complaint.findMany({
+      where: { peopleId: warga.id }, 
+      orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  update(id: number, data: any) {
+    return this.prisma.complaint.update({
+      where: { id },
+      data: { status: data.status }
+    });
+  }
 }

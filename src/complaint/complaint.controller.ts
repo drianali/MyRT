@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ComplaintService } from './complaint.service';
-import { CreateComplaintDto } from './dto/create-complaint.dto';
-import { UpdateComplaintDto } from './dto/update-complaint.dto';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Request } from '@nestjs/common';
+import { ComplaintsService } from './complaint.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('complaint')
-export class ComplaintController {
-  constructor(private readonly complaintService: ComplaintService) {}
+@Controller('complaints')
+export class ComplaintsController {
+  constructor(private readonly complaintsService: ComplaintsService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createComplaintDto: CreateComplaintDto) {
-    return this.complaintService.create(createComplaintDto);
+  create(@Body() data: any, @Request() req) {
+    const userId = req.user.sub || req.user.id;
+    
+    return this.complaintsService.create(+userId, data);
   }
 
   @Get()
   findAll() {
-    return this.complaintService.findAll();
+    return this.complaintsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.complaintService.findOne(+id);
+  @UseGuards(AuthGuard)
+  @Get('mine')
+  findMine(@Request() req) {
+    const userId = req.user.sub || req.user.id;
+    return this.complaintsService.findMine(+userId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateComplaintDto: UpdateComplaintDto) {
-    return this.complaintService.update(+id, updateComplaintDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.complaintService.remove(+id);
+  update(@Param('id') id: string, @Body() data: any) {
+    return this.complaintsService.update(+id, data);
   }
 }

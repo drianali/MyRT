@@ -1,34 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, Request } from '@nestjs/common';
 import { LetterService } from './letter.service';
-import { CreateLetterDto } from './dto/create-letter.dto';
-import { UpdateLetterDto } from './dto/update-letter.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('letter')
+@Controller('letters') 
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createLetterDto: CreateLetterDto) {
-    return this.letterService.create(createLetterDto);
+  create(@Request() req, @Body() data: any) {
+    const userId = req.user.sub || req.user.userId || req.user.id;
+    return this.letterService.create(userId, data);
   }
 
-  @Get()
-  findAll() {
-    return this.letterService.findAll();
+  @UseGuards(AuthGuard)
+  @Get('mine')
+  findMyLetters(@Request() req) {
+    const userId = req.user.sub || req.user.userId || req.user.id;
+    return this.letterService.findMyLetters(userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.letterService.findOne(+id);
+  @UseGuards(AuthGuard)
+  @Get() 
+  findAllAdmin() {
+    return this.letterService.findAllAdmin();
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLetterDto: UpdateLetterDto) {
-    return this.letterService.update(+id, updateLetterDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.letterService.remove(+id);
+  @UseGuards(AuthGuard)
+  @Patch(':id') 
+  updateStatus(@Param('id') id: string, @Body('status') status: string) {
+    return this.letterService.updateStatus(+id, status);
   }
 }

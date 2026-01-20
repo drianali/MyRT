@@ -1,15 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Request } from '@nestjs/common'; // Tambah Request
 import { AnnouncementsService } from './announcements.service';
-import { CreateAnnouncementDto } from './dto/create-announcement.dto';
-import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('announcements')
 export class AnnouncementsController {
   constructor(private readonly announcementsService: AnnouncementsService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
-    return this.announcementsService.create(createAnnouncementDto);
+  create(@Body() data: any, @Request() req) {
+    const userId = req.user.sub || req.user.id; 
+
+    return this.announcementsService.create({
+      ...data,
+      adminId: Number(userId)
+    });
   }
 
   @Get()
@@ -17,16 +22,7 @@ export class AnnouncementsController {
     return this.announcementsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.announcementsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAnnouncementDto: UpdateAnnouncementDto) {
-    return this.announcementsService.update(+id, updateAnnouncementDto);
-  }
-
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.announcementsService.remove(+id);
